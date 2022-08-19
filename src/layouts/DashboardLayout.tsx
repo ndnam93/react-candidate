@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Link, Outlet, useMatch } from 'react-router-dom'
 import { styled, createTheme, ThemeProvider, alpha } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
@@ -12,8 +13,6 @@ import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
-import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -27,6 +26,7 @@ import ListItemText from '@mui/material/ListItemText';
 import { mdTheme } from '../theme';
 import InputBase from '@mui/material/InputBase';
 import Collapse from '@mui/material/Collapse';
+import { Breadcrumb } from '../components/Breadcrumb';
 
 
 const drawerWidth: number = 240;
@@ -177,7 +177,7 @@ export function DashboardLayout() {
               >bots</Typography>
             </Typography>
             
-            <Box flexGrow={1} display="flex" justifyContent="center">
+            <Box flexGrow={1} display="flex" justifyContent="center" px="10px">
               <Search>
                 <SearchIconWrapper>
                   <SearchIcon />
@@ -204,24 +204,28 @@ export function DashboardLayout() {
           }}
         >
           <List component="nav">
-            <ListItemButton onClick={() => toggleList('dashboard')}>
-              <ListItemIcon>
-                <DashboardIcon />
-              </ListItemIcon>
-              <ListItemText primary="Data" />
-              {openList.includes('dashboard') ? <ExpandLess /> : <ExpandMore />}
-            </ListItemButton>
+            <Link to="/dashboard">
+              <ListItemButton onClick={() => toggleList('dashboard')}>
+                <ListItemIcon>
+                  <DashboardIcon />
+                </ListItemIcon>
+                <ListItemText primary="Data" />
+                {openList.includes('dashboard') ? <ExpandLess /> : <ExpandMore />}
+              </ListItemButton>
+            </Link>
 
             <Collapse in={open && openList.includes('dashboard')} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
-                <ListItemButton sx={{ pl: 4 }}>
-                  <ListItemText primary="Users" />
-                </ListItemButton>
-              </List>
-              <List component="div" disablePadding>
-                <ListItemButton sx={{ pl: 4 }}>
-                  <ListItemText primary="Groups" />
-                </ListItemButton>
+                <Link to="/dashboard/users">
+                  <ListItemButton sx={{ pl: 4 }}>
+                    <ListItemText primary="Users" />
+                  </ListItemButton>
+                </Link>
+                <Link to="/dashboard/groups">
+                  <ListItemButton sx={{ pl: 4 }}>
+                    <ListItemText primary="Groups" />
+                  </ListItemButton>
+                </Link>
               </List>
             </Collapse>
           </List>
@@ -236,7 +240,8 @@ export function DashboardLayout() {
         >
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Grid container spacing={3}>
+            <Grid container spacing={3} p={4}>
+              <Outlet />
             </Grid>
           </Container>
         </Box>
