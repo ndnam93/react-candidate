@@ -113,9 +113,14 @@ export function DashboardLayout() {
               component="h1"
               color="inherit"
               noWrap
-              sx={{ flexGrow: 1, fontFamily: 'conthrax-sb' }}
+              sx={{ flexGrow: 1, fontFamily: 'Conthrax' }}
             >
-              READIBOTS
+              readi
+              <Typography
+                component="span"
+                color="red"
+                sx={{ fontFamily: 'Conthrax' }}
+              >bots</Typography>
             </Typography>
             <IconButton color="inherit">
               <Badge badgeContent={4} color="secondary">
