@@ -19,11 +19,14 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import SearchIcon from '@mui/icons-material/Search';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { mdTheme } from '../theme';
 import InputBase from '@mui/material/InputBase';
+import Collapse from '@mui/material/Collapse';
 
 
 const drawerWidth: number = 240;
@@ -68,9 +71,6 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
           duration: theme.transitions.duration.leavingScreen,
         }),
         width: theme.spacing(7),
-        [theme.breakpoints.up('sm')]: {
-          width: theme.spacing(9),
-        },
       }),
     },
   }),
@@ -136,6 +136,16 @@ export function DashboardLayout() {
     setOpen(!open);
   };
 
+  const [openList, setOpenList] = React.useState(['dashboard']);
+  const toggleList = (name: string) => {
+    console.log('toggleList')
+    if (openList.includes(name)) {
+      setOpenList(openList.filter(x => x !== name));
+    } else {
+      setOpenList([... openList, name]);
+    }
+  };
+
   return (
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: 'flex' }}>
@@ -186,23 +196,39 @@ export function DashboardLayout() {
             </IconButton>
           </Toolbar>
         </AppBar>
-        <Drawer variant="permanent" open={open} sx={{ marginTop: '64px' }}>
+        <Drawer variant="permanent" open={open} sx={{ marginTop: '48px' }}
+          PaperProps={{
+            sx: {
+              backgroundColor: theme => theme.palette.grey[100],
+            }
+          }}
+        >
           <List component="nav">
-            <ListItemButton>
+            <ListItemButton onClick={() => toggleList('dashboard')}>
               <ListItemIcon>
                 <DashboardIcon />
               </ListItemIcon>
               <ListItemText primary="Data" />
+              {openList.includes('dashboard') ? <ExpandLess /> : <ExpandMore />}
             </ListItemButton>
+
+            <Collapse in={open && openList.includes('dashboard')} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                <ListItemButton sx={{ pl: 4 }}>
+                  <ListItemText primary="Users" />
+                </ListItemButton>
+              </List>
+              <List component="div" disablePadding>
+                <ListItemButton sx={{ pl: 4 }}>
+                  <ListItemText primary="Groups" />
+                </ListItemButton>
+              </List>
+            </Collapse>
           </List>
         </Drawer>
         <Box
           component="main"
           sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === 'light'
-                ? theme.palette.grey[100]
-                : theme.palette.grey[900],
             flexGrow: 1,
             height: '100vh',
             overflow: 'auto',
